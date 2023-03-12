@@ -15,7 +15,7 @@ class TestGame(unittest.TestCase):
         if position is None: 
             piece = game.board.get_piece(None, player, piece_type)
         else:
-            piece = game.board.get_piece(position, player, piece_type)
+            piece = game.board.get_piece(position, player, piece_type)         
         return piece
     
     def test_place_a_piece(self):
