@@ -1,3 +1,3 @@
 # Hivemind
 
-Struggle to solve the mind ;)
+Fight it, run from it, the hive devours the mind all the same.
