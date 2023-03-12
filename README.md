@@ -1,3 +1,3 @@
 # Hivemind
 
-Struggle to solve the mind ;)
+Struggle to solve the hive ;)
