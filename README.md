@@ -10,11 +10,11 @@ This repository contains a Python implementation of the Hive board game, featuri
 ```bash
 git clone https://github.com/your_username/hive-tkinter.git
 ```
-1. Navigate to the repository folder
+2. Navigate to the repository folder
 ```bash
 cd hive-tkinter
 ```
-1. Install the required packages:bash
+3. Install the required packages:bash
 ```bash
 pip install -r requirements.txt
 ```
