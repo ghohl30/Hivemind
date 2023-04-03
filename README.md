@@ -14,7 +14,7 @@ git clone https://github.com/your_username/hive-tkinter.git
 ```bash
 cd hive-tkinter
 ```
-3. Install the required packages:bash
+3. Install the required packages
 ```bash
 pip install -r requirements.txt
 ```
