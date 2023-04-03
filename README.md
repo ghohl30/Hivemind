@@ -2,6 +2,8 @@
 
 This repository contains a Python implementation of the Hive board game, featuring a Tkinter GUI for ease of use. Players can either play against a friend or face a basic "AI" opponent that makes random legal moves. The game follows the standard Hive rules, and the GUI allows for easy interaction with the game board.
 
+![Hive](https://user-images.githubusercontent.com/74073756/229519349-4fac5067-646c-416c-a046-c1c91a0b2516.gif)
+
 ## Installation
 
 1. Clone the repository
@@ -42,6 +44,6 @@ The current AI opponent makes random legal moves. In the future, we plan to impl
 
 Pull requests are welcome. Please open an issue to discuss any major changes you would like to make.
 
-## License
+## License
 
 This project is licensed under the MIT License. See the LICENSE file for details.
