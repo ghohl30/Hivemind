@@ -38,8 +38,8 @@ class App(tk.Tk):
         self.canvas.bind('<Motion>', self.motion)
 
         # set up hive
-        self.setup_hive()
-        # self.setup_computer_game()
+        #  self.setup_hive()
+        self.setup_computer_game()
 
         # set up for movement
         self.setup_move()   
@@ -62,14 +62,14 @@ class App(tk.Tk):
 
     def setup_hive(self):
         """Sets up a game. Eventually this would of course be done by the user and there would be some kind of lobby."""
-        self.player1 = hive.HumanPlayer("Gregor")
-        self.player2 = hive.HumanPlayer("Wilke")
+        self.player1 = hive.HumanPlayer("Gregor", "w")
+        self.player2 = hive.HumanPlayer("Wilke", "b")
         self.game = hive.Game(self.player1, self.player2)
         self.current_player = self.player1
 
     def setup_computer_game(self):
-        self.player1 = hive.HumanPlayer("Gregor")
-        self.player2 = hive.ComputerPlayer("HiveBot")
+        self.player1 = hive.HumanPlayer("Gregor", "w")
+        self.player2 = hive.ComputerPlayer("HiveBot", "b")
         self.game = hive.Game(self.player1, self.player2)
         self.current_player = self.player1
 
@@ -191,7 +191,8 @@ class App(tk.Tk):
         self.place_piece = False
         self.rerender_board()
 
-        if self.current_player.__repr__() == "ComputerPlayer":
+        # if the current player object is an instance of ComputerPlayer, make the computer move
+        if isinstance(self.current_player, hive.ComputerPlayer):
             print("Computer to move")
             self.current_player.make_move()
             self.change_turn()

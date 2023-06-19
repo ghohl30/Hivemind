@@ -1,4 +1,7 @@
 import random
+from typing import Optional
+import warnings
+import numpy as np
 
 class Game:
 
@@ -18,6 +21,9 @@ class Game:
         player1.play_game(self)
         player2.play_game(self)
 
+        # currently legal moves
+        self.legal_moves = self.all_legal_moves()
+
     def make_move(self, move):
         """Make a move on the board.
 
@@ -28,9 +34,13 @@ class Game:
         move : Move
             The move to be made.
         """
-        if self.winner is not None:
+
+        # if self.winner is instance of Player, then the game is over
+        if isinstance(self.winner, Player):
             print(self.winner)
-            raise ValueError("Game is over")
+            warnings.warn("Game is over")   
+            # return the name of the winner
+            return self.winner.name
         
         # for the first for turns check:
         # 1. if the bee has not been placed the move is a placement move
@@ -40,11 +50,11 @@ class Game:
             if move.piece.position is not None:
                 # if bee.position is None:
                 if not bee.placed:
-                    print("You cannot move before placing the bee")
+                    warnings.warn("You cannot move before placing the bee")
                     return False
             if self.turn_number == 4:
-                if not bee.placed and move.piece.__str__() != "Bee":
-                    print("You have to place your bee within the first 4 turns")
+                if not bee.placed and move.piece.__str__() != "QueenBee":
+                    warnings.warn("You have to place your bee within the first 4 turns")
                     return False
 
         res = move.piece.try_move(move)
@@ -58,13 +68,39 @@ class Game:
                 self.winner = result
                 print("Game Over")
             self.turn = self.player2 if self.turn == self.player1 else self.player1
-            print(self.turn)
+            # print(self.turn)
             if self.turn == self.player1:
                 self.turn_number += 1
         
-        # print(self.all_legal_moves())
+        # update legal moves
+        self.legal_moves = self.all_legal_moves()
+        if len(self.legal_moves) == 0:
+            self.winner = self.player2 if self.turn == self.player1 else self.player1
+            print("Game Over")
         return res
     
+    def matrix_to_move(self, matrix):
+        # matrix is a 22x22x7 np array
+
+        if np.sum(matrix[:,:,0])!=0:
+            #this is the first move
+            # TODO
+            pass
+
+        # get the index of max value
+        mov_index = np.unravel_index(matrix.argmax(), matrix.shape)
+
+        # get the piece
+        piece = self.board.get_piece_from_label(Board.labels[mov_index[0]])
+        
+        # get the position of known new neighbour
+        neighbor = self.board.get_piece_from_label(Board.labels[mov_index[1]])
+
+        pos = [neighbor.position[i] + Piece.adjacent[mov_index[2]-1][i] for i in range(3)]
+        move = Move(piece.player, piece, pos)
+
+        return move
+
     def all_legal_moves(self):
         """Return all legal moves for a given player."""
         player = self.turn
@@ -78,7 +114,7 @@ class Game:
                 movement = "Illegal"
             if bee.position is None and self.turn_number == 4:
                 movement = "Place bee"
-                print("You have to place your bee within the first 4 turns")
+                warnings.warn("You have to place your bee within the first 4 turns")
             
 
         for piece in self.board.pieces:
@@ -96,8 +132,12 @@ class Board:
     """
 
     # here you can play with the number and types of pieces
-    game_mode = [('Bee', 1), ('Ant',3), ('Beetle', 2), ('Spider', 2), ('Grasshopper', 3)]
+    game_mode = [('QueenBee', 1), ('Ant',3), ('Beetle', 2), ('Spider', 2), ('Grasshopper', 3)]
     # game_mode = [('Bee', 1), ('Beetle', 2)]
+
+    # List of labels
+    labels = ['wQ1', 'wA1', 'wA2', 'wA3', 'wG1', 'wG2', 'wG3', 'wB1', 'wB2', 'wS1', 'wS2', 
+                'bQ1', 'bA1', 'bA2', 'bA3', 'bG1', 'bG2', 'bG3', 'bB1', 'bB2', 'bS1', 'bS2']
     
     def __init__(self, game: Game):
         """Initialize a new board.
@@ -111,28 +151,36 @@ class Board:
         # get pieces for each player
         for player in [self.game.player1, self.game.player2]:
             for p in self.game_mode:
-                if p[0] == 'Bee':
+                if p[0] == 'QueenBee':
                     for i in range(p[1]):
-                        self.pieces.append(Bee(player, self.game))
+                        self.pieces.append(Bee(player, self.game, i+1))
                 elif p[0] == 'Ant':
                     for i in range(p[1]):
-                        self.pieces.append(Ant(player, self.game))
+                        self.pieces.append(Ant(player, self.game, i+1))
                 elif p[0] == 'Beetle':
                     for i in range(p[1]):
-                        self.pieces.append(Beetle(player, self.game))
+                        self.pieces.append(Beetle(player, self.game, i+1))
                 elif p[0] == 'Spider':
                     for i in range(p[1]):
-                        self.pieces.append(Spider(player, self.game))
+                        self.pieces.append(Spider(player, self.game, i+1))
                 elif p[0] == 'Grasshopper':
                     for i in range(p[1]):
-                        self.pieces.append(Grasshopper(player, self.game))
+                        self.pieces.append(Grasshopper(player, self.game, i+1))
 
+    # returns the bee object of the given player
     def get_bee(self, player):
         """Returns the bee of the given player."""
         for piece in self.pieces:
-            if piece.__str__() == 'Bee' and piece.player == player:
+            if piece.__str__() == 'QueenBee' and piece.player == player:
                 return piece
-        return None
+        raise RuntimeError("No bee found for this player")
+
+    def get_piece_from_label(self, name):
+        """Returns the piece with the given label."""
+        for piece in self.pieces:
+            if piece.name == name:
+                return piece
+        raise RuntimeError("No piece found with this name")
 
     def get_piece(self, position, player=None, piece_type = None):
         """Return the piece at the given position.
@@ -166,12 +214,9 @@ class Board:
     def check_game_over(self):
         # the game is over if either bee is fully surrounded
         # the game end in a draw if both bees are fully surrounded
-        for piece in self.pieces:
-            if piece.__str__() == 'Bee':
-                if piece.player == self.game.player1:
-                    bee1 = piece
-                else:
-                    bee2 = piece
+
+        bee1 = self.get_bee(self.game.player1)
+        bee2 = self.get_bee(self.game.player2)
 
         if bee1.num_neighbors() == 6:
             if bee2.num_neighbors() == 6:
@@ -194,7 +239,7 @@ class Board:
         
         # if pieces is empty raise: This is the first piece
         if len(pieces) == 0:
-            print("piece is the first piece")
+            warnings.warn("piece is the first piece")
             return True
 
         # basically a depth first search
@@ -220,17 +265,114 @@ class Board:
         self.board_state = [[piece.__repr__(), piece.position, piece.edge] for piece in self.pieces if piece.position is not None]
         # for line in self.board_state:
         #     print(line)
+    
+    def move_mask(self):
+        """Returns a mask of all possible moves."""
+        mask = np.zeros((22,22,7))
 
-    def make_move(self, move):
-        """Passes the legal move to the piece and updates the board state accordingly."""
-        if self.legal_board(move):
-            res = move.piece.move(move.position, move.edge)
-            if res:
-                self.generate_board_state()
-                for line in self.board_state:
-                    print(line)
-            return res
-        return False
+        # if it is the first turn layers 1-6 stay 0. Layer 0 is 1 on the diagonal until 11x11
+        if self.game.turn_number == 1 and self.game.turn == self.game.player1:
+            for i in range(11):
+                mask[i,i,0] = 1
+                return mask
+
+        # layer 0 stays 0. The rest is determined from the legal moves of the game class
+        for move in self.game.legal_moves:
+            idxs = [(self.labels.index(move.piece.name), self.labels.index(p.name), ((k+3)%6)+1) for k, p in enumerate(move.edge) if p is not None]
+            for idx in idxs:
+                mask[idx] = 1/len(idxs)
+
+        return mask
+    
+    def get_matrices(self):
+        
+        # Adjacency matrix
+        adj = np.zeros((22,22))
+
+        # Mounting matrix
+        mount = np.zeros((22,22))
+
+        # Set firstPiece
+        if self.game.turn == self.game.player2 and self.game.turn_number == 1:
+            firstPiece = self.pieces[0]
+            firstPieceIdx = self.labels.index(firstPiece.name)
+            firstPiece_layer = np.ones((22,22)) * firstPieceIdx
+        else:
+            firstPiece_layer = np.zeros((22,22))
+
+        for piece in self.pieces:
+            if piece.position is not None:
+                index = self.labels.index(piece.name)
+                adj[index, index] = -1
+                for i, neighbor in enumerate(piece.edge):
+                    if neighbor is not None:
+                        neighbor_index = self.labels.index(neighbor.name)
+                        adj[index, neighbor_index] = i+1
+                # if the piece is a beetle, check if it is mounting. If so add the mounted piece to the adjacency matrix
+                if piece.__str__() == 'Beetle' and piece.mounting:
+                    mounted_piece = piece.mounted_piece
+                    mounted_index = self.labels.index(mounted_piece.name)
+                    
+                    mount[index, mounted_index] = 1
+                    mount[mounted_index, index] = -1
+
+                    if mounted_piece.__str__() == 'Beetle' and mounted_piece.mounting:
+                        mounted_piece = mounted_piece.mounted_piece
+                        mounted_index = self.labels.index(mounted_piece.name)
+                        
+                        mount[index, mounted_index] = 1
+                        mount[mounted_index, index] = -1
+
+                        if mounted_piece.__str__() == 'Beetle' and mounted_piece.mounting:
+                            mounted_piece = mounted_piece.mounted_piece
+                            mounted_index = self.labels.index(mounted_piece.name)
+                            
+                            mount[index, mounted_index] = 1
+                            mount[mounted_index, index] = -1
+
+        return adj, mount, firstPiece_layer
+
+    def get_graph(self):
+        # get feature vector x, edge_index and edge attribute
+
+        x = np.zeros((22, 1))
+
+        # # get edge_index and edge_attr
+        edge_index = []
+        edge_attr = []
+
+        for piece in self.pieces:
+            if piece.position is not None:
+                index = self.labels.index(piece.name)
+                x[index] = 1
+                for i, neighbor in enumerate(piece.edge):
+                    if neighbor is not None:
+                        neighbor_index = self.labels.index(neighbor.name)
+                        edge_index.append([index, neighbor_index])
+                        edge_attr.append(i+1)
+                # if the piece is a beetle, check if it is mounting. If so add the mounted piece to the adjacency matrix
+                if piece.__str__() == 'Beetle' and piece.mounting:
+                    mounted_piece = piece.mounted_piece
+                    mounted_index = self.labels.index(mounted_piece.name)
+
+                    x[index] = 2
+
+                    if mounted_piece.__str__() == 'Beetle' and mounted_piece.mounting:
+                        mounted_piece = mounted_piece.mounted_piece
+                        mounted_index = self.labels.index(mounted_piece.name)
+
+                        x[index] = 3
+
+                        if mounted_piece.__str__() == 'Beetle' and mounted_piece.mounting:
+                            x[index] = 4
+
+        edge_index = np.array(edge_index).T
+        edge_attr = np.array(edge_attr)
+
+        return x, edge_index, edge_attr
+
+
+
 
     def edges(self):
         """Returns all edges of the board."""
@@ -294,17 +436,13 @@ class Move:
 class Player:
     """Represents a player in the game."""
     
-    def __init__(self, name):
+    def __init__(self, name, color):
         self.name = name
-        self.active_game = None
+        self.color = color
 
-    def play_game(self, game):
+    def play_game(self, game: Game):
         """Enters the player into a game."""
         self.active_game = game
-
-    def is_Whiteside(self):
-        """Returns true if the player is playing as the whiteside."""
-        return self.isWhite
 
     def make_move(self, move):
         """Makes a move on the board.
@@ -316,6 +454,9 @@ class Player:
             raise Exception("Player is not playing a game")
         self.active_game.make_move(move)
 
+    def __repr__(self):
+        return self.name
+    
 class HumanPlayer(Player):
     
     def __repr__(self) -> str:
@@ -324,11 +465,21 @@ class HumanPlayer(Player):
 class ComputerPlayer(Player):
     
     def __repr__(self):
-        return "{}".format(self.__class__.__name__)
+        return self.name
     
     def make_move(self):
 
-        possible_moves = self.active_game.all_legal_moves()
+        possible_moves = self.active_game.legal_moves
+
+        # choose a random move
+        move = random.choice(possible_moves)
+
+        # make the move
+        super().make_move(move)
+
+    def make_random_move(self):
+
+        possible_moves = self.active_game.legal_moves
 
         # choose a random move
         move = random.choice(possible_moves)
@@ -341,7 +492,8 @@ class Piece:
     # six hexagonal neighbors
     adjacent = [(1,1,0), (0,1,1), (-1,0,1), (-1,-1,0), (0,-1,-1), (1,0,-1)]
 
-    def __init__(self, player, game):
+    def __init__(self, player, game, id):
+        self.name = player.color + self.__str__()[0] + str(id)
         self.position = None
         self.edge = None
         self.player = player
@@ -392,13 +544,13 @@ class Piece:
         # make sure the piece is not on top of another piece
         for piece in self.game.board.pieces: 
             if piece.position == move.position:
-                print("piece is on top of another piece")
+                warnings.warn("piece is on top of another piece")
                 return False
             
         # check if new position is connected to the hive 
         first_piece = self.game.turn_number == 1 and self.game.turn == self.game.player1 
         if move.edge == [None for i in range(len(move.edge))] and not first_piece:
-            print("piece is not connected to the hive")
+            warnings.warn("piece is not connected to the hive")
             return False
 
         # check if the placed piece is not touching an opponents piece
@@ -407,13 +559,13 @@ class Piece:
             if len(neighboring_players) == 1 and move.piece.player in neighboring_players:
                 return True
             else:
-                print("piece is touching an opposing piece")
+                warnings.warn("piece is touching an opposing piece")
                 return False
 
         # check if the hive is still connected
         # since we already checked that the new position is connected, it is enough to check if the hive without the moving piece is connnected
         if not self.game.board.is_connected(move):
-            print("hive is not connected")
+            warnings.warn("hive is not connected")
             return False
 
         return True
@@ -440,17 +592,23 @@ class Piece:
         if edge==None:
             edge = self.game.board.get_edge(position)
 
+        # replace appearances of self in edge with None
+        edge = [None if piece == self else piece for piece in edge]
+
         reach = [[position[i] + adj[i] for i in range(len(position))] for adj in Piece.adjacent] 
+        neighbors_reach = [[piece.position[i] + adj[i] for i in range(len(piece.position))] for piece in edge if piece != None for adj in Piece.adjacent]
         rm = []
         for i, hex in enumerate(reach):
-            if edge[i] != None or ((edge[(i+1)%6] != None) == (edge[(i-1)%6] != None)):
+            # check for narrow passages
+            if edge[i] != None or ((edge[(i+1)%6] != None) and (edge[(i-1)%6] != None)):
                 rm.append(i)
                 continue
-            if edge[(i+1)%6] != None and edge[(i-1)%6] != None:
-                rm.append(i)
+            # check if new position would share a neighbor with the current position of the piece
+
         for i in reversed(rm):
             reach.pop(i)
-
+ 
+        reach = [pos for pos in reach if pos in neighbors_reach]
         return reach
 
     def legal_moves(self, edges, movement="Allowed"):
@@ -463,7 +621,7 @@ class Piece:
         moves = []
 
         if movement == "Place bee":
-            if self.__str__() == "Bee":
+            if self.__str__() == "QueenBee":
                 moves += self.game.board.legal_placement_moves(self, edges)
             return moves
 
@@ -502,8 +660,8 @@ class Piece:
 
 class Bee(Piece):
 
-    def __init__(self, player, game):
-        super().__init__(player, game)
+    def __init__(self, player, game, id):
+        super().__init__(player, game, id)
         self.placed = False
 
     def is_legal_move(self, new_position, new_edge):
@@ -523,10 +681,13 @@ class Bee(Piece):
                 return True
         return False
 
+    def __str__(self):
+        return "QueenBee"
+
 class Beetle(Piece):
 
-    def __init__(self, player, game):
-        super().__init__(player, game)
+    def __init__(self, player, game, id):
+        super().__init__(player, game, id)
         self.mounting = False
         self.mounted_piece = None
 
@@ -543,13 +704,13 @@ class Beetle(Piece):
         if self.position == None:
             for piece in self.game.board.pieces: 
                 if piece.position == move.position:
-                    print("piece is on top of another piece")
+                    warnings.warn("piece is on top of another piece")
                     return False
 
         # check if new position is connected to the hive 
         first_piece = self.game.turn_number == 1 and self.game.turn == self.game.player1 
         if move.edge == [None for i in range(len(move.edge))] and not first_piece and self.mounting == False:
-            print("piece is not connected to the hive")
+            warnings.warn("piece is not connected to the hive")
             return False
 
         # check if the placed piece is not touching an opponents piece
@@ -558,13 +719,13 @@ class Beetle(Piece):
             if len(neighboring_players) == 1 and move.piece.player in neighboring_players:
                 return True
             else:
-                print("piece is touching an opposing piece")
+                warnings.warn("piece is touching an opposing piece")
                 return False
 
         # check if the hive is still connected
         # since we already checked that the new position is connected, it is enough to check if the hive without the moving piece is connnected
         if not self.mounting and not self.game.board.is_connected(move):
-            print("hive is not connected")
+            warnings.warn("hive is not connected")
             return False
 
         if self.position == None: 
@@ -659,18 +820,18 @@ class Grasshopper(Piece):
         
         # if the direction does not contain a 0, then the grasshopper is not moving in a straight line and is therefore not a legal move
         if not (direction.count(0) == 1):
-            print("not a straight line")
+            warnings.warn("not a straight line")
             return False
 
         # if the distance is not greater than 1, then the grasshopper is not jumping over any pieces and is therefore not a legal move
         if distance < 2:
-            print("not jumping over any pieces")
+            warnings.warn("not jumping over any pieces")
             return False
         
         # check if all positions between the current position and the new position are filled
         for i in range(1, distance):
             if self.game.board.get_piece([self.position[j] + direction[j]*i for j in range(len(self.position))]) == None:
-                print("there are some gaps")
+                warnings.warn("there are some gaps")
                 return False
         
         return True
@@ -693,7 +854,7 @@ class Spider(Piece):
     def is_legal_move(self, new_position, new_edge):
         # if the spider has 5 neighbors, it cannot move
         if self.num_neighbors() == 5:
-            print("spider has 5 neighbors")
+            warnings.warn("spider has 5 neighbors")
             return False
 
         # get positions that are exactly 3 spaces away from the current position
@@ -705,13 +866,13 @@ class Spider(Piece):
         if new_position in reachable3:
             return True
 
-        print("new position is not reachable")
+        warnings.warn("new position is not reachable")
         return False
 
 
 if __name__ == "__main__":
-    Gregor = HumanPlayer("Gregor")
-    Wilke = HumanPlayer("Wilke")
+    Gregor = HumanPlayer("Gregor", 'w')
+    Wilke = HumanPlayer("Wilke", 'b')
     game = Game(Gregor, Wilke)
 
     firstMove = Move(Gregor, game.board.pieces[0], [0,0,0])
