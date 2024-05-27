@@ -1,6 +1,8 @@
 import tkinter as tk
 from math import cos, sin, sqrt, radians
 import hive
+from ComputerPlayers import AgressiveComputer, RandomComputer, AIPlayer
+from tkinter import messagebox
 
 class App(tk.Tk):
     """
@@ -38,7 +40,7 @@ class App(tk.Tk):
         self.canvas.bind('<Motion>', self.motion)
 
         # set up hive
-        #  self.setup_hive()
+        # self.setup_hive()
         self.setup_computer_game()
 
         # set up for movement
@@ -69,7 +71,7 @@ class App(tk.Tk):
 
     def setup_computer_game(self):
         self.player1 = hive.HumanPlayer("Gregor", "w")
-        self.player2 = hive.ComputerPlayer("HiveBot", "b")
+        self.player2 = AIPlayer("HiveBot", "b")
         self.game = hive.Game(self.player1, self.player2)
         self.current_player = self.player1
 
@@ -183,16 +185,27 @@ class App(tk.Tk):
             else: 
                 print("invalid move")
 
+    def show_winner(self):
+        """Show a message box announcing the winner."""
+        messagebox.showinfo("Game Over", f"Winner: {self.game.winner}")
+
     def change_turn(self):
         """After a turn everything is set up for the next player."""
+        
         self.current_player = self.game.turn
 
         self.clicknum = 0
         self.place_piece = False
         self.rerender_board()
 
+        # Check if the game is over
+        if isinstance(self.game.winner, hive.Player):
+            self.after(100, self.show_winner)
+            print(f"Game Over! Winner: {self.game.winner}")
+            return
+
         # if the current player object is an instance of ComputerPlayer, make the computer move
-        if isinstance(self.current_player, hive.ComputerPlayer):
+        if self.current_player.computer_player:
             print("Computer to move")
             self.current_player.make_move()
             self.change_turn()

@@ -2,11 +2,15 @@ import random
 from typing import Optional
 import warnings
 import numpy as np
+import copy
 
 class Game:
 
     def __init__(self, player1, player2):
         """Initialize a new game."""
+        if player1.name == player2.name:
+            raise ValueError("Player1 and Player2 cannot have the same name")
+
         self.player1 = player1
         self.player2 = player2
         self.turn = player1
@@ -42,6 +46,11 @@ class Game:
             # return the name of the winner
             return self.winner.name
         
+        # check if piece belongs to current player
+        if move.piece.player.name != self.turn.name:
+            warnings.warn("You cannot move your opponents pieces")
+            return False
+        
         # for the first for turns check:
         # 1. if the bee has not been placed the move is a placement move
         # 2. if the bee has not been placed within the first 3 moves decline any non-placement moves for the 4th turn
@@ -66,17 +75,20 @@ class Game:
             result = self.board.check_game_over()
             if result is not False:
                 self.winner = result
-                print("Game Over")
+                warnings.warn("Game Over")
             self.turn = self.player2 if self.turn == self.player1 else self.player1
             # print(self.turn)
             if self.turn == self.player1:
                 self.turn_number += 1
+                print(self.turn_number)
+        else:
+            print("Illegal move")
         
         # update legal moves
         self.legal_moves = self.all_legal_moves()
         if len(self.legal_moves) == 0:
             self.winner = self.player2 if self.turn == self.player1 else self.player1
-            print("Game Over")
+            warnings.warn("Game Over")
         return res
     
     def matrix_to_move(self, matrix):
@@ -96,7 +108,10 @@ class Game:
         # get the position of known new neighbour
         neighbor = self.board.get_piece_from_label(Board.labels[mov_index[1]])
 
-        pos = [neighbor.position[i] + Piece.adjacent[mov_index[2]-1][i] for i in range(3)]
+        if self.turn_number == 1 and self.turn == self.player1:
+            pos = [0,0,0]
+        else:
+            pos = [neighbor.position[i] + Piece.adjacent[mov_index[2]-1][i] for i in range(3)]
         move = Move(piece.player, piece, pos)
 
         return move
@@ -105,7 +120,6 @@ class Game:
         """Return all legal moves for a given player."""
         player = self.turn
         moves = []
-        edges = self.board.edges()
         movement = "Allowed"
 
         if self.turn_number < 5:
@@ -119,8 +133,57 @@ class Game:
 
         for piece in self.board.pieces:
             if piece.player == player:
+                edges = self.board.edges()
                 moves += piece.legal_moves(edges, movement)
         return moves
+    
+    def act(self, action):
+        # make move from valid action
+        # first get 3d index from action
+        ijk = self.index1Dto3D(action)
+        # then create a matrix with 1 at the index
+        matrix = np.zeros((22,22,7))
+        matrix[ijk] = 1
+        # then convert matrix to move
+        move = self.matrix_to_move(matrix)
+        # then make move
+        self.make_move(move)
+    
+    def get_valid_actions(self): 
+        # moves = self.all_legal_moves()
+        # # return a tuple of strings that each combine the name of the piece and the position
+        # return (move.piece.name +'_' + str(move.old_position) + '_' + str(move.position) for move in moves)
+        mask = self.board.move_mask()
+        idxs =  np.argwhere(mask>0)
+        return [self.index3Dto1D(idx) for idx in idxs]
+    
+    @staticmethod
+    def index3Dto1D(ijk):
+        """
+        Convert a 3D index to a 1D index for an array with the given 22x22x7.
+        """
+        i, j, k = ijk
+        return i*22*7 + j*7 + k
+    
+    @staticmethod
+    def index1Dto3D(i):
+        """
+        Convert a 1D index to a 3D index for an array with the given 22x22x7.
+        """
+        k = i % 7
+        j = (i // 7) % 22
+        i = i // (7*22)
+        return (i, j, k)
+    
+    def move_from_valid_action(self, action):
+        for move in self.all_legal_moves():
+            if action == move.piece.name +'_' + str(move.old_position) + '_' + str(move.position):
+                return move
+            
+    def clone(self):
+        # This creates a deep copy of the game, meaning that all state is copied
+        # and changes to the cloned game won't affect the original game
+        return copy.deepcopy(self)
 
 class Board:
     """Represents the board of a hive game.
@@ -132,7 +195,7 @@ class Board:
     """
 
     # here you can play with the number and types of pieces
-    game_mode = [('QueenBee', 1), ('Ant',3), ('Beetle', 2), ('Spider', 2), ('Grasshopper', 3)]
+    game_mode = [('QueenBee', 1), ('Ant',0), ('Beetle', 5), ('Spider', 2), ('Grasshopper', 3)]
     # game_mode = [('Bee', 1), ('Beetle', 2)]
 
     # List of labels
@@ -171,7 +234,7 @@ class Board:
     def get_bee(self, player):
         """Returns the bee of the given player."""
         for piece in self.pieces:
-            if piece.__str__() == 'QueenBee' and piece.player == player:
+            if piece.__str__() == 'QueenBee' and piece.player.name == player.name:
                 return piece
         raise RuntimeError("No bee found for this player")
 
@@ -239,7 +302,6 @@ class Board:
         
         # if pieces is empty raise: This is the first piece
         if len(pieces) == 0:
-            warnings.warn("piece is the first piece")
             return True
 
         # basically a depth first search
@@ -274,7 +336,7 @@ class Board:
         if self.game.turn_number == 1 and self.game.turn == self.game.player1:
             for i in range(11):
                 mask[i,i,0] = 1
-                return mask
+            return mask
 
         # layer 0 stays 0. The rest is determined from the legal moves of the game class
         for move in self.game.legal_moves:
@@ -371,8 +433,23 @@ class Board:
 
         return x, edge_index, edge_attr
 
+    def get_current_state(self):
+        x, edge_index, edge_attr = self.get_graph()
+        # create a hashable tuple
+        state = (tuple(x.flatten()), tuple(edge_index.flatten()), tuple(edge_attr.flatten()))
+        return state
+    
+    def state_to_graph(self, state):
+        # input: hashable tuple
+        # output: x, edge_index, edge_attr
+        x, edge_index, edge_attr = state
+        x = np.array(x).reshape(22,1)
+        edge_index = np.array(edge_index).reshape(2, int(len(edge_index)/2))
+        edge_attr = np.array(edge_attr)
+        return x, edge_index, edge_attr
 
-
+    def set_board_state(self, x, edge_index, edge_attribute):
+        pass
 
     def edges(self):
         """Returns all edges of the board."""
@@ -400,6 +477,11 @@ class Board:
 
     def legal_placement_moves(self, piece, edge):
         """Returns all legal placement moves for a piece."""
+
+        test_edge = self.edges()
+        if edge != test_edge:
+                print("ERROR: edge is not a legal placement move")
+
         moves = []
         # add all possible placement moves. A piece cannot be placed next to an opponent's piece
         for e in edge:
@@ -431,14 +513,15 @@ class Move:
         return new_edge
 
     def __repr__(self):
-        return "{}({}, {})".format(self.__class__.__name__, self.piece, self.position)
+        return "{}({}, {})".format(self.piece.name, self.piece, self.position)
 
 class Player:
     """Represents a player in the game."""
     
-    def __init__(self, name, color):
+    def __init__(self, name, color, auto=False):
         self.name = name
         self.color = color
+        self.computer_player = auto
 
     def play_game(self, game: Game):
         """Enters the player into a game."""
@@ -462,31 +545,6 @@ class HumanPlayer(Player):
     def __repr__(self) -> str:
         return self.name
 
-class ComputerPlayer(Player):
-    
-    def __repr__(self):
-        return self.name
-    
-    def make_move(self):
-
-        possible_moves = self.active_game.legal_moves
-
-        # choose a random move
-        move = random.choice(possible_moves)
-
-        # make the move
-        super().make_move(move)
-
-    def make_random_move(self):
-
-        possible_moves = self.active_game.legal_moves
-
-        # choose a random move
-        move = random.choice(possible_moves)
-
-        # make the move
-        super().make_move(move)
-
 class Piece:
 
     # six hexagonal neighbors
@@ -502,8 +560,15 @@ class Piece:
 
     def update_neighbors(self):
         """Updates the edge of the piece based on the current board state."""
+        if self.position is None:
+            print(f"Error: Piece {self.name} has no position.")
+            return
+
         neighbors = [piece for piece in self.edge if piece != None]
         for piece in neighbors:
+            if piece.position is None:
+                print(f"Error: Neighbor piece {piece.name} has no position.")
+                continue
             for i, adj in enumerate(Piece.adjacent):
                 if self.position == [piece.position[i] + adj[i] for i in range(len(piece.position))]:
                     piece.edge[i] = self
@@ -551,6 +616,11 @@ class Piece:
         first_piece = self.game.turn_number == 1 and self.game.turn == self.game.player1 
         if move.edge == [None for i in range(len(move.edge))] and not first_piece:
             warnings.warn("piece is not connected to the hive")
+            return False
+        
+        # make sure the piece belongs the active player
+        if move.piece.player != self.game.turn:
+            warnings.warn("piece does not belong to the active player")
             return False
 
         # check if the placed piece is not touching an opponents piece
@@ -653,7 +723,7 @@ class Piece:
         return moves    
 
     def __repr__(self):
-        return "{}({}, {})".format(self.__class__.__name__, self.player, self.position)
+        return "{}({}, {})".format(self.name, self.player, self.position)
 
     def __str__(self):
         return "{}".format(self.__class__.__name__)
@@ -875,7 +945,7 @@ if __name__ == "__main__":
     Wilke = HumanPlayer("Wilke", 'b')
     game = Game(Gregor, Wilke)
 
-    firstMove = Move(Gregor, game.board.pieces[0], [0,0,0])
+    firstMove = Move(Gregor, game.board.pieces[15], [0,0,0])
     game.make_move(firstMove)
     print(len(game.all_legal_moves()))
     secondMove = Move(Wilke, game.board.pieces[9], [1,1,0])
