@@ -1,3 +1,8 @@
+import sys
+ 
+# setting path
+sys.path.append('../../src')
+
 import argparse
 import numpy as np
 import random
@@ -59,7 +64,7 @@ def evaluate_player(player, n=100):
 
     # player is white
     for i in range(n//2):
-        player2 = hive.ComputerPlayer("Random", "b")
+        player2 = ComputerPlayers.RandomComputer("Random", "b")
 
         game = hive.Game(player, player2)
         game_over = False
@@ -76,7 +81,7 @@ def evaluate_player(player, n=100):
 
     # player is black
     for i in range(n//2, n):
-        player2 = hive.ComputerPlayer("Random", "w")
+        player2 = ComputerPlayers.RandomComputer("Random", "w")
         player.color = "b"
 
         game = hive.Game(player2, player)
