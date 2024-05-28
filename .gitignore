@@ -5,3 +5,12 @@ Hive.gif
 .vscode
 *.xlsx
 *.csv
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.zip
+*.mp4
+*.gif
+*.xlsx
+profile_results/

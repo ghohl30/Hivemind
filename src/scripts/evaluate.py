@@ -40,9 +40,6 @@ def evaluate_player_multicore(player, n=100):
     if n % 2 != 0:
         raise ValueError("Input must be an even integer")
 
-    # with Pool() as p:
-    #     args = [(player, i, "w") if i < n//2 else (player, i, "b") for i in range(n)]
-    #     results = p.map(simulate_game, args)
     args = [(player, i, "w") if i < n//2 else (player, i, "b") for i in range(n)]
     results = process_map(simulate_game, args, max_workers=n)
 
