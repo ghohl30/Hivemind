@@ -1,10 +1,16 @@
+import sys
+ 
+# setting path
+sys.path.append('../../src')
+sys.path.append('../../src/utils')
+
 import hive
 import utils
 import matplotlib.pyplot as plt
 import imageio
 import os
 
-from ComputerPlayers import AgressiveComputer
+from ComputerPlayers import AgressiveComputer, RandomComputer
 
 # Create a subfolder named 'img'
 if not os.path.exists('img'):
@@ -12,7 +18,7 @@ if not os.path.exists('img'):
 
 # player1 = hive.ComputerPlayer("Gregor", "w")
 player1 = AgressiveComputer("Agressive", "w")
-player2 = hive.ComputerPlayer("Wilke", "b")
+player2 = RandomComputer("Wilke", "b")
 
 game = hive.Game(player1, player2)
 
@@ -39,7 +45,7 @@ while not game_over:
 
 
 # Convert images into a GIF
-with imageio.get_writer('game.gif', mode='I') as writer:
+with imageio.get_writer('media/game.gif', mode='I') as writer:
     for filename in filenames:
         image = imageio.imread(filename)
         writer.append_data(image) # type: ignore
@@ -48,7 +54,7 @@ with imageio.get_writer('game.gif', mode='I') as writer:
 images = [imageio.imread(filename) for filename in filenames]
 
 # Save the images as a video
-imageio.mimsave('game.mp4', images, fps=5) # type: ignore
+imageio.mimsave('media/game.mp4', images, fps=5) # type: ignore
 
 # Remove all image files
 for filename in filenames:

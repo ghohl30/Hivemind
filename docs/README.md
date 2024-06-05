@@ -38,6 +38,19 @@ The game will continue until one player wins by surrounding the opponent's Queen
 
 For a detailed explanation of the game rules, please refer to the official Hive rules.
 
+## Project Structure
+
+The project is organized as follows:
+
+- src: Contains the source code for the game implementation
+- scripts: contain scripts for conducting experiments and testing the game
+  - evaluate.py: Simulates the game between two AI players and evaluates their performance
+  - LearnHive: first approach to implement a reinforcement learning agent with Monte Carlo Tree Search (under review)
+  - profile_hive.py: Profiles the Hive game to identify performance bottlenecks. (open issue)
+  - random_game.py: Simulates a random game between two AI players and creates a gif of the game
+- tests: Contains unit tests for the game implementation
+- old: Contains old versions of the game implementation (to be removed in the future)
+
 ## Future Plans
 
 The current AI opponent makes random legal moves. In the future, we plan to implement an AI opponent using reinforcement learning techniques, which will make the AI more challenging and engaging for players.Contributing
