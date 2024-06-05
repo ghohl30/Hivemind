@@ -195,7 +195,7 @@ class Board:
     """
 
     # here you can play with the number and types of pieces
-    game_mode = [('QueenBee', 1), ('Ant',0), ('Beetle', 5), ('Spider', 2), ('Grasshopper', 3)]
+    game_mode = [('QueenBee', 1), ('Ant',3), ('Beetle', 2), ('Spider', 2), ('Grasshopper', 3)]
     # game_mode = [('Bee', 1), ('Beetle', 2)]
 
     # List of labels

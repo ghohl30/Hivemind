@@ -1,3 +1,13 @@
+# Description: This script profiles the main function of the hive game.
+# It is used to identify bottlenecks in the code and optimize it.
+# It uses the cProfile module to profile the main function and saves the results to a file.
+
+import sys
+ 
+# setting path
+# make sure your in the src/scripts directory (not so clean, open to suggestions)
+sys.path.append('../../src')
+
 import cProfile
 import pstats
 import hive

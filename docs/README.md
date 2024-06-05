@@ -45,7 +45,9 @@ The project is organized as follows:
 - src: Contains the source code for the game implementation
 - scripts: contain scripts for conducting experiments and testing the game
   - evaluate.py: Simulates the game between two AI players and evaluates their performance
-  - 
+  - LearnHive: first approach to implement a reinforcement learning agent with Monte Carlo Tree Search (under review)
+  - profile_hive.py: Profiles the Hive game to identify performance bottlenecks. (open issue)
+  - random_game.py: Simulates a random game between two AI players and creates a gif of the game
 - tests: Contains unit tests for the game implementation
 - old: Contains old versions of the game implementation (to be removed in the future)
 
