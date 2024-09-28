@@ -1,0 +1,151 @@
+Thu Sep 26 07:23:36 2024    profile_results
+
+         179182232 function calls (158493215 primitive calls) in 45.145 seconds
+
+   Ordered by: cumulative time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000   51.696   51.696 {built-in method builtins.exec}
+        1    0.000    0.000   51.696   51.696 <string>:1(<module>)
+        1    0.000    0.000   51.696   51.696 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/profile_hive.py:17(main)
+        6    0.000    0.000   51.695    8.616 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/ComputerPlayers.py:195(make_move)
+  10883/6    0.035    0.000   51.681    8.613 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/ComputerPlayers.py:152(minimax)
+    11692    0.104    0.000   34.168    0.003 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:119(all_legal_moves)
+    10883    0.087    0.000   32.806    0.003 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:31(make_move)
+   128612    0.081    0.000   31.059    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:684(legal_moves)
+   113097    0.487    0.000   17.136    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:478(legal_placement_moves)
+    10877    0.053    0.000   16.378    0.002 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:183(clone)
+17752385/10877    8.095    0.000   16.326    0.002 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/copy.py:128(deepcopy)
+814648/10877    1.016    0.000   16.273    0.001 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/copy.py:259(_reconstruct)
+814648/10877    1.439    0.000   16.214    0.001 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/copy.py:227(_deepcopy_dict)
+1142864/43508    1.174    0.000   15.618    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/copy.py:201(_deepcopy_list)
+    15167    0.089    0.000   13.843    0.001 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:711(legal_movement)
+    55086    0.032    0.000    9.774    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:643(try_move)
+  1313732    0.936    0.000    9.734    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:469(check_contested)
+  2696747    0.734    0.000    9.377    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:260(neighboring_hexes)
+    32578    0.490    0.000    9.191    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:865(is_legal_move)
+ 11184367    8.949    0.000    8.949    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:248(get_piece)
+  2696747    4.433    0.000    8.643    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:265(<listcomp>)
+   563444    0.282    0.000    6.404    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:496(__init__)
+   563444    1.029    0.000    6.121    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:504(generate_new_edge)
+   490229    0.992    0.000    5.747    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:657(reachable)
+   241709    1.536    0.000    5.566    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:454(edges)
+   405372    0.572    0.000    4.059    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:267(get_edge)
+   490229    1.301    0.000    2.539    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:669(<listcomp>)
+   563444    1.174    0.000    2.194    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:506(<listcomp>)
+   134098    0.049    0.000    2.162    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:745(try_move)
+   490229    0.833    0.000    1.597    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:668(<listcomp>)
+   189184    0.423    0.000    1.434    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:599(is_legal_move)
+ 33786818    1.351    0.000    1.351    0.000 {method 'get' of 'dict' objects}
+    84415    0.052    0.000    1.106    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:737(is_legal_move)
+   146768    0.748    0.000    0.945    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:292(is_connected)
+ 23307582    0.806    0.000    0.806    0.000 {built-in method builtins.id}
+  2772160    0.587    0.000    0.801    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/copy.py:243(_keep_alive)
+ 30596666    0.795    0.000    0.795    0.000 {built-in method builtins.len}
+  1629296    0.182    0.000    0.703    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/copy.py:264(<genexpr>)
+ 15338553    0.547    0.000    0.547    0.000 {method 'append' of 'list' objects}
+ 12447625    0.458    0.000    0.458    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/copy.py:182(_deepcopy_atomic)
+   490229    0.359    0.000    0.359    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:681(<listcomp>)
+   241709    0.355    0.000    0.355    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:464(<listcomp>)
+   241042    0.037    0.000    0.287    0.000 {built-in method builtins.repr}
+    10877    0.030    0.000    0.280    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/ComputerPlayers.py:8(find_move_index)
+776683/546949    0.220    0.000    0.261    0.000 {method 'format' of 'str' objects}
+   241042    0.046    0.000    0.250    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:515(__repr__)
+   814648    0.218    0.000    0.218    0.000 {method '__reduce_ex__' of 'object' objects}
+   814648    0.135    0.000    0.189    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/copyreg.py:100(__newobj__)
+   241709    0.174    0.000    0.174    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:463(<listcomp>)
+   490229    0.146    0.000    0.146    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:666(<listcomp>)
+  1629296    0.137    0.000    0.137    0.000 {built-in method builtins.getattr}
+   490892    0.076    0.000    0.118    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:728(__str__)
+   445919    0.117    0.000    0.117    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:315(<listcomp>)
+     1090    0.001    0.000    0.115    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:924(is_legal_move)
+  1640179    0.103    0.000    0.103    0.000 {built-in method builtins.isinstance}
+   563444    0.098    0.000    0.098    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:507(<listcomp>)
+   139849    0.057    0.000    0.096    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:651(num_neighbors)
+   814648    0.096    0.000    0.096    0.000 {method 'update' of 'dict' objects}
+    43459    0.044    0.000    0.095    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:234(get_bee)
+  1538974    0.086    0.000    0.086    0.000 {method 'pop' of 'list' objects}
+    10883    0.009    0.000    0.071    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:277(check_game_over)
+    10075    0.054    0.000    0.071    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/ComputerPlayers.py:139(evaluate)
+   405372    0.069    0.000    0.069    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:270(<listcomp>)
+    10883    0.006    0.000    0.068    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:325(generate_board_state)
+   814648    0.068    0.000    0.068    0.000 {method 'items' of 'dict' objects}
+    13259    0.038    0.000    0.065    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:561(update_neighbors)
+    10883    0.019    0.000    0.062    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:327(<listcomp>)
+     8941    0.008    0.000    0.057    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:587(make_move)
+   814648    0.053    0.000    0.053    0.000 {built-in method __new__ of type object at 0x1026eef80}
+     1942    0.004    0.000    0.053    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:807(make_move)
+   814657    0.051    0.000    0.051    0.000 {built-in method builtins.hasattr}
+     1090    0.001    0.000    0.050    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:932(<listcomp>)
+     1090    0.001    0.000    0.049    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:933(<listcomp>)
+     4964    0.047    0.000    0.047    0.000 {built-in method builtins.print}
+   814648    0.047    0.000    0.047    0.000 {built-in method builtins.issubclass}
+      136    0.000    0.000    0.046    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:853(legal_movement)
+    44749    0.009    0.000    0.043    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:725(__repr__)
+     3684    0.009    0.000    0.038    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:771(try_move)
+   189184    0.036    0.000    0.036    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:617(<listcomp>)
+   137539    0.035    0.000    0.035    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:655(<listcomp>)
+    64762    0.030    0.000    0.031    0.000 {built-in method _warnings.warn}
+    63130    0.020    0.000    0.020    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:573(<listcomp>)
+     1294    0.001    0.000    0.017    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:841(is_legal_move)
+     1614    0.005    0.000    0.009    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:886(is_legal_move)
+    10883    0.006    0.000    0.009    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:577(remove_from_old_neighbors)
+   110080    0.006    0.000    0.006    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:754(__str__)
+    11891    0.005    0.000    0.005    0.000 {built-in method builtins.max}
+    13259    0.004    0.000    0.004    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:567(<listcomp>)
+    44755    0.004    0.000    0.004    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:540(__repr__)
+     7320    0.003    0.000    0.003    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:628(<listcomp>)
+     6835    0.002    0.000    0.002    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:583(<listcomp>)
+       10    0.000    0.000    0.001    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/warnings.py:96(_showwarnmsg)
+       10    0.000    0.000    0.001    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/warnings.py:20(_showwarnmsg_impl)
+     3684    0.001    0.000    0.001    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:782(<listcomp>)
+       10    0.000    0.000    0.001    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/warnings.py:117(_formatwarnmsg)
+       10    0.000    0.000    0.001    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/warnings.py:35(_formatwarnmsg_impl)
+     1826    0.001    0.000    0.001    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:788(<listcomp>)
+       10    0.000    0.000    0.001    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/linecache.py:26(getline)
+       10    0.000    0.000    0.001    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/linecache.py:36(getlines)
+        1    0.000    0.000    0.001    0.001 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/linecache.py:80(updatecache)
+     1614    0.001    0.000    0.001    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:887(<listcomp>)
+     1582    0.001    0.000    0.001    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:580(<listcomp>)
+     1614    0.000    0.000    0.000    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:889(<listcomp>)
+        1    0.000    0.000    0.000    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:9(__init__)
+        1    0.000    0.000    0.000    0.000 {method 'readlines' of '_io._IOBase' objects}
+      573    0.000    0.000    0.000    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:903(<listcomp>)
+     1294    0.000    0.000    0.000    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:846(<listcomp>)
+        1    0.000    0.000    0.000    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/tokenize.py:390(open)
+     1614    0.000    0.000    0.000    0.000 {method 'count' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/tokenize.py:297(detect_encoding)
+        1    0.000    0.000    0.000    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/tokenize.py:321(read_or_stop)
+        1    0.000    0.000    0.000    0.000 {method 'readline' of '_io.BufferedReader' objects}
+      600    0.000    0.000    0.000    0.000 {built-in method builtins.min}
+     1614    0.000    0.000    0.000    0.000 {built-in method builtins.abs}
+       10    0.000    0.000    0.000    0.000 {method 'write' of '_io.TextIOWrapper' objects}
+        1    0.000    0.000    0.000    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:205(__init__)
+        1    0.000    0.000    0.000    0.000 {built-in method io.open}
+       22    0.000    0.000    0.000    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:553(__init__)
+       90    0.000    0.000    0.000    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:809(<listcomp>)
+        6    0.000    0.000    0.000    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/codecs.py:319(decode)
+        1    0.000    0.000    0.000    0.000 {built-in method posix.stat}
+       10    0.000    0.000    0.000    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/warnings.py:403(__init__)
+        9    0.000    0.000    0.000    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/copyreg.py:109(_slotnames)
+        6    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
+        4    0.000    0.000    0.000    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:759(__init__)
+        1    0.000    0.000    0.000    0.000 {method '__exit__' of '_io._IOBase' objects}
+        1    0.000    0.000    0.000    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/tokenize.py:327(find_cookie)
+       10    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:733(__init__)
+        2    0.000    0.000    0.000    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/ComputerPlayers.py:135(__init__)
+        1    0.000    0.000    0.000    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/codecs.py:309(__init__)
+        2    0.000    0.000    0.000    0.000 {method 'match' of 're.Pattern' objects}
+        2    0.000    0.000    0.000    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:521(__init__)
+        1    0.000    0.000    0.000    0.000 {method 'startswith' of 'bytes' objects}
+        9    0.000    0.000    0.000    0.000 {method 'get' of 'mappingproxy' objects}
+        1    0.000    0.000    0.000    0.000 {method 'startswith' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 {method 'decode' of 'bytes' objects}
+        2    0.000    0.000    0.000    0.000 /Users/gregor30/Documents/Programmieren/Python/Hivemind/src/scripts/../../src/hive.py:526(play_game)
+        1    0.000    0.000    0.000    0.000 /Users/gregor30/miniforge3/envs/hivemind/lib/python3.10/codecs.py:260(__init__)
+        1    0.000    0.000    0.000    0.000 {method 'endswith' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 {method 'seek' of '_io.BufferedReader' objects}
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+
+
